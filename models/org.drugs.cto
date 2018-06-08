@@ -56,17 +56,16 @@ event BuyDrugsEvent {
   --> Customer buyer
 }
 
-transaction UpdateOrderStatus {
-  o OrderStatus orderStatus
-  o String din optional
-  --> Order order
-}
-
 event UpdateOrderStatusEvent {
   o OrderStatus orderStatus
   o Order order
 }
 
+transaction UpdateOrderStatus {
+  o OrderStatus orderStatus
+  o String din optional
+  --> Order order
+}
 
 // Distributer DEFINITIONS
 participant Distributer extends Customer {
