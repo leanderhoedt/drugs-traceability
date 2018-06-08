@@ -13,53 +13,86 @@
  */
 
 /**
- * Write your model definitions here
+ * New model file
  */
 
 namespace org.drugs
 
-abstract participant Person identified by personId {
-  o String personId
+// BASE DEFINTIONS
+
+concept DrugDetails {
+  --> Manufacturer make
+  o String serial
   o String name
 }
 
-participant Manufacturer extends Person{
+abstract participant Company identified by companyId {
+  o String companyId
+  o String name
 }
 
-participant Wholesaler extends Person{
+participant Patient identified by patid {
+  o String patid
+  o String email optional
 }
 
-participant Pharmacist extends Person{
+
+// MANUFACTURE DEFINITIONS
+participant Manufacturer extends Company {
 }
 
-participant Patient extends Person{
+enum OrderStatus {
+  o PLACED
+  o SCHEDULED_FOR_MANUFACTURE
+  o VIN_ASSIGNED
+  o OWNER_ASSIGNED
+  o DELIVERED
 }
 
-asset Drug identified by serialNumber {
-  o String serialNumber
-  o String drugName
-  o String productCode
-  o String batchNumber
-  o String hashCode
-
-  --> Manufacturer maker
-  --> Wholesaler saler optional
-  --> Pharmacist pharma optional
-  --> Patient patient optional
+asset Order identified by orderId {
+  o String orderId
+  o DrugDetails drugDetails
+  o OrderStatus orderStatus
+  --> Patient orderer
 }
 
-enum TransferStatus {
-  o CREATED
-  o WHOLESALE
-  o PHARMACY
-  o PATIENT
+transaction PlaceOrder {
+  o String orderId
+  o DrugDetails drugDetails
+  --> Patient orderer
 }
 
-transaction TransferDrugs {
-  o Manufacturer manufacturer
-  o Wholesaler wholesaler
-  o Pharmacist pharmacist
-  o Patient patient
-  o TransferStatus transferStatus
-  --> Drug drug
+event PlaceOrderEvent {
+  o String orderId
+  o DrugDetails drugDetails
+  --> Patient orderer
+}
+
+transaction UpdateOrderStatus {
+  o OrderStatus orderStatus
+  o String din optional
+  --> Order order
+}
+
+event UpdateOrderStatusEvent {
+  o OrderStatus orderStatus
+  o Order order
+}
+
+
+// Distributer DEFINITIONS
+participant Distributer extends Company {
+}
+// Pharmacy DEFINITIONS
+participant Pharmacy extends Company {
+}
+
+asset Drug identified by din {
+  o String din
+  o DrugDetails drugDetails
+  --> Patient owner optional
+}
+
+// DEMO SPECIFIC DEFINITIONS
+transaction SetupDemo {
 }
