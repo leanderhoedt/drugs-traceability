@@ -34,8 +34,10 @@ participant Patient identified by patientId {
   o String patientId
 }
 
-asset Drug identified by drugId {
-  o String drugId
+asset Drug identified by serialNumber {
+  o String serialNumber
+  o String productCode
+  o String batchNumber
   o Manifacturer manifacturer
 }
 
@@ -44,6 +46,14 @@ enum TransferStatus {
   o WHOLESALE
   o PHARMACY
   o PATIENT
+}
+
+event ProduceDrugEvent {
+  --> Drug drug
+}
+
+event TransferDrugEvent{
+  --> Drug drug
 }
 
 transaction TransferDrugs {
