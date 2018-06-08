@@ -18,22 +18,29 @@
 
 namespace org.drugs
 
-participant manifacturer identified by manifacturerId {
+participant Manifacturer identified by manifacturerId {
   o String manifacturerId
 }
 
-participant wholesaler identified by wholesalerId {
+participant Wholesaler identified by wholesalerId {
   o String wholesalerId
 }
 
-participant pharmacist identified by pharmacistId {
+participant Pharmacist identified by pharmacistId {
   o String pharmacistId
 }
 
-participant patient identified by patientId {
+participant Patient identified by patientId {
   o String patientId
 }
 
-asset drugs identified by drugsId {
+asset Drugs identified by drugsId {
   o String drugsId
+}
+
+transaction TransferDrugs {
+  o Manifacturer manifacturer
+  o Wholesaler wholesaler
+  o Pharmacist pharmacist
+  o Patient patient
 }
