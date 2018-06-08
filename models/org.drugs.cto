@@ -18,25 +18,34 @@
 
 namespace org.drugs
 
-participant Manifacturer identified by manifacturerId {
-  o String manifacturerId
+abstract participant Person identified by personId {
+  o String personId
+  o String name
 }
 
-participant Wholesaler identified by wholesalerId {
-  o String wholesalerId
+participant Manufacturer extends Person{
 }
 
-participant Pharmacist identified by pharmacistId {
-  o String pharmacistId
+participant Wholesaler extends Person{
 }
 
-participant Patient identified by patientId {
-  o String patientId
+participant Pharmacist extends Person{
 }
 
-asset Drug identified by drugId {
-  o String drugId
-  o Manifacturer manufacturer
+participant Patient extends Person{
+}
+
+asset Drug identified by serialNumber {
+  o String serialNumber
+  o String drugName
+  o String productCode
+  o String batchNumber
+  o String hashCode
+
+  --> Manufacturer maker
+  --> Wholesaler saler optional
+  --> Pharmacist pharma optional
+  --> Patient patient optional
 }
 
 enum TransferStatus {
@@ -47,9 +56,10 @@ enum TransferStatus {
 }
 
 transaction TransferDrugs {
-  o Manifacturer manufacturer
+  o Manufacturer manufacturer
   o Wholesaler wholesaler
   o Pharmacist pharmacist
   o Patient patient
   o TransferStatus transferStatus
+  --> Drug drug
 }
