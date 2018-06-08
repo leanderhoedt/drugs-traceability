@@ -38,9 +38,17 @@ asset Drugs identified by drugsId {
   o String drugsId
 }
 
+enum TransferStatus {
+  o CREATED
+  o WHOLESALE
+  o PHARMACY
+  o PATIENT
+}
+
 transaction TransferDrugs {
   o Manifacturer manifacturer
   o Wholesaler wholesaler
   o Pharmacist pharmacist
   o Patient patient
+  o TransferStatus transferStatus
 }
