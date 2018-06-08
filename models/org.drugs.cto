@@ -34,8 +34,9 @@ participant Patient identified by patientId {
   o String patientId
 }
 
-asset Drugs identified by drugsId {
-  o String drugsId
+asset Drug identified by drugId {
+  o String drugId
+  o Manifacturer manifacturer
 }
 
 transaction TransferDrugs {
