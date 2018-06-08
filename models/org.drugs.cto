@@ -36,7 +36,7 @@ participant Patient identified by patientId {
 
 asset Drug identified by drugId {
   o String drugId
-  o Manifacturer manifacturer
+  o Manifacturer manufacturer
 }
 
 enum TransferStatus {
@@ -47,7 +47,7 @@ enum TransferStatus {
 }
 
 transaction TransferDrugs {
-  o Manifacturer manifacturer
+  o Manifacturer manufacturer
   o Wholesaler wholesaler
   o Pharmacist pharmacist
   o Patient patient

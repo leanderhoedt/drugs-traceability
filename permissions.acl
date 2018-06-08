@@ -16,10 +16,10 @@
 
 rule ManufacturerCreateDrugs {
     description: "Allow manufacturers to create and view their Drugs"
-    participant(m): "org.drugs.Manifacturer"
+    participant(m): "org.drugs.Manufacturer"
     operation: CREATE
-    resource(d): "org.drugs.Drugs"
+    resource(d): "org.drugs.Drug"
     transaction(tx): "org.drugs.TransferDrugs"
-    condition: (d.Manifacturer.getIdentifier() == m.getIdentifier() && tx.orderStatus == "CREATED")
+    condition: (d.Manufacturer.getIdentifier() == m.getIdentifier() && tx.orderStatus == "CREATED")
     action: ALLOW
 }
