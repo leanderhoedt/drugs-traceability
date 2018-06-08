@@ -39,9 +39,17 @@ asset Drug identified by drugId {
   o Manifacturer manifacturer
 }
 
+enum TransferStatus {
+  o CREATED
+  o WHOLESALE
+  o PHARMACY
+  o PATIENT
+}
+
 transaction TransferDrugs {
   o Manifacturer manifacturer
   o Wholesaler wholesaler
   o Pharmacist pharmacist
   o Patient patient
+  o TransferStatus transferStatus
 }
