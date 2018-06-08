@@ -18,25 +18,22 @@
 
 namespace org.drugs
 
-participant SampleParticipant identified by participantId {
-  o String participantId
-  o String firstName
-  o String lastName
+participant manifacturer identified by manifacturerId {
+  o String manifacturerId
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  --> SampleParticipant owner
-  o String value
+participant wholesaler identified by wholesalerId {
+  o String wholesalerId
 }
 
-transaction SampleTransaction {
-  --> SampleAsset asset
-  o String newValue
+participant pharmacist identified by pharmacistId {
+  o String pharmacistId
 }
 
-event SampleEvent {
-  --> SampleAsset asset
-  o String oldValue
-  o String newValue
+participant patient identified by patientId {
+  o String patientId
+}
+
+asset drugs identified by drugsId {
+  o String drugsId
 }
