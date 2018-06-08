@@ -19,53 +19,41 @@
 namespace org.drugs
 
 // BASE DEFINTIONS
-
-concept DrugDetails {
-  --> Manufacturer make
-  o String serial
-  o String name
-}
-
-abstract participant Company identified by companyId {
-  o String companyId
-  o String name
-}
-
-participant Patient identified by patid {
-  o String patid
-  o String email optional
+abstract participant Customer identified by cutomerId {
+  o String cutomerId
 }
 
 
 // MANUFACTURE DEFINITIONS
-participant Manufacturer extends Company {
+participant Manufacturer identified by manyfacturerId { 
+  o String manyfacturerId
+  o String name
 }
 
 enum OrderStatus {
-  o PLACED
-  o SCHEDULED_FOR_MANUFACTURE
-  o VIN_ASSIGNED
-  o OWNER_ASSIGNED
+  o CREATED
+  o DISTRIBUTED
+  o PHARMA
   o DELIVERED
 }
 
 asset Order identified by orderId {
   o String orderId
-  o DrugDetails drugDetails
+  o Drug drug
   o OrderStatus orderStatus
-  --> Patient orderer
+  --> Customer orderer
 }
 
-transaction PlaceOrder {
+transaction BuyDrugs {
   o String orderId
-  o DrugDetails drugDetails
-  --> Patient orderer
+  o Drug drug
+  --> Customer buyer
 }
 
-event PlaceOrderEvent {
+event BuyDrugsEvent {
   o String orderId
-  o DrugDetails drugDetails
-  --> Patient orderer
+  o Drug drug
+  --> Customer buyer
 }
 
 transaction UpdateOrderStatus {
@@ -81,16 +69,23 @@ event UpdateOrderStatusEvent {
 
 
 // Distributer DEFINITIONS
-participant Distributer extends Company {
+participant Distributer extends Customer {
 }
 // Pharmacy DEFINITIONS
-participant Pharmacy extends Company {
+participant Pharmacy extends Customer {
 }
 
-asset Drug identified by din {
-  o String din
-  o DrugDetails drugDetails
-  --> Patient owner optional
+// Patient DEFINITIONS
+participant Patient extends Customer {
+}
+
+asset Drug identified by serial {
+  o String serial
+  o String productCode
+  o String batchNumber
+  o String name
+  --> Manufacturer maker
+  --> Customer owner optional
 }
 
 // DEMO SPECIFIC DEFINITIONS
