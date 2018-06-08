@@ -13,25 +13,53 @@
  */
 
 /**
- * Write your model definitions here
+ * New model file
  */
 
 namespace org.drugs
 
-participant Manifacturer identified by manifacturerId {
-  o String manifacturerId
+// BASE DEFINTIONS
+
+concept DrugDetails {
+  --> Manufacturer make
+  o String serial
+  o String name
 }
 
-participant Wholesaler identified by wholesalerId {
-  o String wholesalerId
+abstract participant Company identified by companyId {
+  o String companyId
+  o String name
 }
 
-participant Pharmacist identified by pharmacistId {
-  o String pharmacistId
+participant Patient identified by patid {
+  o String patid
+  o String email optional
 }
 
-participant Patient identified by patientId {
-  o String patientId
+
+// MANUFACTURE DEFINITIONS
+participant Manufacturer extends Company {
+}
+
+enum OrderStatus {
+  o PLACED
+  o SCHEDULED_FOR_MANUFACTURE
+  o VIN_ASSIGNED
+  o OWNER_ASSIGNED
+  o DELIVERED
+}
+
+asset Order identified by orderId {
+  o String orderId
+  o DrugDetails drugDetails
+  o OrderStatus orderStatus
+  --> Patient orderer
+}
+
+transaction PlaceOrder {
+  o String orderId
+  o DrugDetails drugDetails
+  --> Patient orderer
 }
 
 asset Drug identified by serialNumber {
@@ -41,19 +69,21 @@ asset Drug identified by serialNumber {
   o Manifacturer manifacturer
 }
 
-enum TransferStatus {
-  o CREATED
-  o WHOLESALE
-  o PHARMACY
-  o PATIENT
+event PlaceOrderEvent {
+  o String orderId
+  o DrugDetails drugDetails
+  --> Patient orderer
 }
 
-event ProduceDrugEvent {
-  --> Drug drug
+event UpdateOrderStatusEvent {
+  o OrderStatus orderStatus
+  o Order order
 }
 
-event TransferDrugEvent{
-  --> Drug drug
+transaction UpdateOrderStatus {
+  o OrderStatus orderStatus
+  o String din optional
+  --> Order order
 }
 
 transaction TransferDrugs {
@@ -62,4 +92,22 @@ transaction TransferDrugs {
   o Pharmacist pharmacist
   o Patient patient
   o TransferStatus transferStatus
+}
+
+
+// Distributer DEFINITIONS
+participant Distributer extends Company {
+}
+// Pharmacy DEFINITIONS
+participant Pharmacy extends Company {
+}
+
+asset Drug identified by din {
+  o String din
+  o DrugDetails drugDetails
+  --> Patient owner optional
+}
+
+// DEMO SPECIFIC DEFINITIONS
+transaction SetupDemo {
 }
