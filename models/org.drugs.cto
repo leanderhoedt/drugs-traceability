@@ -23,48 +23,22 @@ abstract participant Customer identified by cutomerId {
   o String cutomerId
 }
 
-
-// MANUFACTURE DEFINITIONS
-participant Manufacturer identified by manyfacturerId { 
-  o String manyfacturerId
-  o String name
+enum DrugStatus {
+  o VALID
+  o SOLD
+  o VOID  
 }
 
-enum OrderStatus {
+enum DrugTransactionStatus{
   o CREATED
   o DISTRIBUTED
   o PHARMA
   o DELIVERED
 }
-
-asset Order identified by orderId {
-  o String orderId
-  o Drug drug
-  o OrderStatus orderStatus
-  --> Customer orderer
-}
-
-transaction BuyDrugs {
-  o String orderId
-  o Drug drug
-  --> Customer buyer
-}
-
-event BuyDrugsEvent {
-  o String orderId
-  o Drug drug
-  --> Customer buyer
-}
-
-event UpdateOrderStatusEvent {
-  o OrderStatus orderStatus
-  o Order order
-}
-
-transaction UpdateOrderStatus {
-  o OrderStatus orderStatus
-  o String din optional
-  --> Order order
+// MANUFACTURE DEFINITIONS
+participant Manufacturer identified by manyfacturerId { 
+  o String manyfacturerId
+  o String name
 }
 
 // Distributer DEFINITIONS
@@ -78,13 +52,42 @@ participant Pharmacy extends Customer {
 participant Patient extends Customer {
 }
 
+//assets
+
 asset Drug identified by serial {
   o String serial
   o String productCode
   o String batchNumber
   o String name
+  o DrugStatus drugStatus
   --> Manufacturer maker
   --> Customer owner optional
+}
+
+//transactions and events
+/*
+//Volgens mij kan je alle status updates via de updateDrugStatus doen
+transaction BuyDrugs {
+  o String orderId
+  o Drug drug
+  --> Customer buyer
+}
+
+event BuyDrugsEvent {
+  o String orderId
+  o Drug drug
+  --> Customer buyer
+}
+*/
+
+transaction UpdateDrugStatus {
+  o DrugTransactionStatus drugTransactionStatus
+  --> Drug drug
+}
+
+event UpdateDrugStatusEvent {
+  o DrugTransactionStatus drugTransactionStatus
+  o Drug drug
 }
 
 // DEMO SPECIFIC DEFINITIONS

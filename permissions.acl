@@ -12,59 +12,60 @@
  * limitations under the License.
  */
 
-rule PatientMakeOrder {
-    description: "Allow Patients to buy drugs and view orders"
-    participant(p): "org.drugs.Patient"
-    operation: CREATE
-    resource(o): "org.drugs.Order"
-    transaction(tx): "org.drugs.PlaceOrder"
-    condition: (o.orderer.getIdentifier() == p.getIdentifier())
-    action: ALLOW
-}
-
-rule PatientPlaceOrder {
-    description: "Allow Patients to place orders and view they've done this"
-    participant(p): "org.drugs.Patient"
-    operation: CREATE, READ
-    resource(o): "org.drugs.PlaceOrder"
-    condition: (o.orderer.getIdentifier() == p.getIdentifier())
-    action: ALLOW
-}
-
-rule PatientReadOrder {
-    description: "Allow Patients to place orders and view they've done this"
+rule PatientViewDrugs {
+    description: "Allow Patients to view owned drugs"
     participant(p): "org.drugs.Patient"
     operation: READ
-    resource(o): "org.drugs.Order"
-    condition: (o.orderer.getIdentifier() == p.getIdentifier())
+    resource(d): "org.drugs.Drug"
+    condition: (d.owner.getIdentifier() == p.getIdentifier())
     action: ALLOW
 }
 
-rule ManufacturerUpdateOrder {
-    description: "Allow manufacturers to view and update their own orders"
-    participant(m): "org.drugs.Manufacturer"
-    operation: UPDATE
-    resource(o): "org.drugs.Order"
-    transaction(tx): "org.drugs.UpdateOrderStatus"
-    condition: (o.drugDetails.make.getIdentifier() == m.getIdentifier())
-    action: ALLOW
-}
-
-rule ManufacturerUpdateOrderStatus {
-    description: "Allow manufacturers to update order statuses and view they've done this"
-    participant(m): "org.drugs.Manufacturer"
+rule PatientBuyDrugs {
+    description: "Allow Patients to buy valid Drugs from the pharmacy"
+    participant(p): "org.drugs.Patient"
     operation: CREATE, READ
-    resource(o): "org.drugs.UpdateOrderStatus"
-    condition: (o.order.drugDetails.make.getIdentifier() == m.getIdentifier())
+    resource(d): "org.drugs.Drug"
+    transaction(tx): "org.drugs.UpdateDrugStatus"
+    condition: (tx.drugTransactionStatus == "PHARMA" && d.drugStatus=="VALID")
     action: ALLOW
 }
 
-rule ManufacturerReadOrder {
-    description: "Allow manufacturers to view and update their own orders"
-    participant(m): "org.drugs.Manufacturer"
+rule PharmaViewDrugs {
+    description: "Allow Pharmacists to view owned drugs"
+    participant(p): "org.drugs.Pharmacy"
     operation: READ
-    resource(o): "org.drugs.Order"
-    condition: (o.drugDetails.make.getIdentifier() == m.getIdentifier())
+    resource(d): "org.drugs.Drug"
+    condition: (d.owner.getIdentifier() == p.getIdentifier())
+    action: ALLOW
+}
+
+rule PharmaBuyDrugs {
+    description: "Allow Pharmacists to buy valid Drugs from the Distributer"
+    participant(p): "org.drugs.Pharmacy"
+    operation: CREATE, READ
+    resource(d): "org.drugs.Drug"
+    transaction(tx): "org.drugs.UpdateDrugStatus"
+    condition: (tx.drugTransactionStatus == "DISTRIBUTED" && d.drugStatus=="VALID")
+    action: ALLOW
+}
+
+rule DistributerViewDrugs {
+    description: "Allow Distributer to view owned drugs"
+    participant(p): "org.drugs.Distributer"
+    operation: READ
+    resource(d): "org.drugs.Drug"
+    condition: (d.owner.getIdentifier() == p.getIdentifier())
+    action: ALLOW
+}
+
+rule DistributerBuyDrugs {
+    description: "Allow Distributer to buy valid Drugs from the Distributer"
+    participant(p): "org.drugs.Distributer"
+    operation: CREATE, READ
+    resource(d): "org.drugs.Drug"
+    transaction(tx): "org.drugs.UpdateDrugStatus"
+    condition: (tx.drugTransactionStatus == "CREATED" && d.drugStatus=="VALID")
     action: ALLOW
 }
 
@@ -73,8 +74,8 @@ rule ManufacturerCreateDrugs {
     participant(m): "org.drugs.Manufacturer"
     operation: CREATE
     resource(d): "org.drugs.Drug"
-    transaction(tx): "org.drugs.UpdateOrderStatus"
-    condition: (d.drugDetails.make.getIdentifier() == m.getIdentifier() && tx.orderStatus == "VIN_ASSIGNED")
+    transaction(tx): "org.drugs.UpdateDrugStatus"
+    condition: (d.maker.getIdentifier() == m.getIdentifier() && tx.drugStatus == "VALID")
     action: ALLOW
 }
 
@@ -83,7 +84,7 @@ rule ManufacturerReadDrugs {
     participant(m): "org.drugs.Manufacturer"
     operation: READ
     resource(d): "org.drugs.Drug"
-    condition: (d.drugDetails.make.getIdentifier() == m.getIdentifier())
+    condition: (d.maker.getIdentifier() == m.getIdentifier())
     action: ALLOW
 }
 
