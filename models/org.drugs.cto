@@ -19,8 +19,8 @@
 namespace org.drugs
 
 // BASE DEFINTIONS
-abstract participant Customer identified by cutomerId {
-  o String cutomerId
+abstract participant Customer identified by customerId {
+  o String customerId
 }
 
 enum DrugStatus {
@@ -36,8 +36,8 @@ enum DrugTransactionStatus{
   o DELIVERED
 }
 // MANUFACTURE DEFINITIONS
-participant Manufacturer identified by manyfacturerId { 
-  o String manyfacturerId
+participant Manufacturer identified by manufacturerId { 
+  o String manufacturerId
   o String name
 }
 
@@ -45,7 +45,7 @@ participant Manufacturer identified by manyfacturerId {
 participant Distributer extends Customer {
 }
 // Pharmacy DEFINITIONS
-participant Pharmacy extends Customer {
+participant Pharmacist extends Customer {
 }
 
 // Patient DEFINITIONS
@@ -54,13 +54,13 @@ participant Patient extends Customer {
 
 //assets
 
-asset Drug identified by serial {
-  o String serial
+asset Drug identified by serialNumber {
+  o String serialNumber
   o String productCode
   o String batchNumber
   o String name
   o DrugStatus drugStatus
-  --> Manufacturer maker
+  --> Manufacturer manufacturer
   --> Customer owner optional
 }
 

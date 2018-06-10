@@ -22,7 +22,7 @@ rule PatientViewDrugs {
 }
 
 rule PatientBuyDrugs {
-    description: "Allow Patients to buy valid Drugs from the pharmacy"
+    description: "Allow Patients to buy valid Drugs from the pharmacist"
     participant(p): "org.drugs.Patient"
     operation: CREATE, READ
     resource(d): "org.drugs.Drug"
@@ -33,7 +33,7 @@ rule PatientBuyDrugs {
 
 rule PharmaViewDrugs {
     description: "Allow Pharmacists to view owned drugs"
-    participant(p): "org.drugs.Pharmacy"
+    participant(p): "org.drugs.Pharmacist"
     operation: READ
     resource(d): "org.drugs.Drug"
     condition: (d.owner.getIdentifier() == p.getIdentifier())
@@ -42,7 +42,7 @@ rule PharmaViewDrugs {
 
 rule PharmaBuyDrugs {
     description: "Allow Pharmacists to buy valid Drugs from the Distributer"
-    participant(p): "org.drugs.Pharmacy"
+    participant(p): "org.drugs.Pharmacist"
     operation: CREATE, READ
     resource(d): "org.drugs.Drug"
     transaction(tx): "org.drugs.UpdateDrugStatus"
