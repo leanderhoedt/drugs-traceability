@@ -44,7 +44,7 @@ participant Manufacturer identified by manufacturerId {
 // Distributer DEFINITIONS
 participant Distributer extends Customer {
 }
-// Pharmacy DEFINITIONS
+// Pharmacist DEFINITIONS
 participant Pharmacist extends Customer {
 }
 
@@ -61,9 +61,8 @@ asset Drug identified by serialNumber {
   o String name
   o DrugStatus drugStatus
   --> Manufacturer manufacturer
-  --> Manufacturer maker
-  --> Distributer distributer
-  --> Pharmacy pharmacy
+  --> Distributer distributer optional
+  --> Pharmacist pharmacist optional
   --> Customer owner optional
 }
 
@@ -90,6 +89,7 @@ transaction UpdateDrugStatus {
 
 event UpdateDrugStatusEvent {
   o DrugTransactionStatus drugTransactionStatus
+  o Customer customer
   o Drug drug
 }
 
