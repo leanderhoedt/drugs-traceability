@@ -81,6 +81,8 @@ event BuyDrugsEvent {
 transaction UpdateDrugStatus {
   o DrugTransactionStatus drugTransactionStatus
   o Customer customer
+  --> Distributer distributer optional
+  --> Pharmacist pharmacist optional
   --> Drug drug
 }
 
