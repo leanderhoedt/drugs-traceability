@@ -50,7 +50,8 @@ participant Patient extends Customer {
 
 //assets
 
-asset Drug identified by serialNumber {
+asset Drug identified by drugHash {
+  o String drugHash
   o String serialNumber
   o String productCode
   o String batchNumber
@@ -77,6 +78,16 @@ event BuyDrugsEvent {
   --> Customer buyer
 }
 */
+
+//Drug creation transaction 
+transaction createDrug {
+  o String serialNumber
+  o String productCode
+  o String batchNumber
+  o String name
+  o DrugStatus drugStatus
+  --> Manufacturer manufacturer
+}
 
 transaction UpdateDrugStatus {
   o DrugTransactionStatus drugTransactionStatus

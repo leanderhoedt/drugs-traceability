@@ -12,8 +12,8 @@
  * limitations under the License.
  */
 
-rule PatientViewDrugs {
-    description: "Allow Customers to view valid drugs"
+rule ParticipantsViewDrugs {
+    description: "Allow Participants to view valid and available drugs"
     participant(p): "org.drugs.Customer"
     operation: READ
     resource(d): "org.drugs.Drug"
@@ -21,7 +21,7 @@ rule PatientViewDrugs {
     action: ALLOW
 }
 
-rule PatientViewDrugs {
+rule PatientViewOwnDrugs {
     description: "Allow Patients to view owned drugs"
     participant(p): "org.drugs.Patient"
     operation: READ
@@ -40,15 +40,6 @@ rule PatientBuyDrugs {
     action: ALLOW
 }
 
-rule PharmaViewDrugs {
-    description: "Allow Pharmacists to view owned drugs"
-    participant(p): "org.drugs.Pharmacist"
-    operation: READ
-    resource(d): "org.drugs.Drug"
-    condition: (d.owner.getIdentifier() == p.getIdentifier())
-    action: ALLOW
-}
-
 rule PharmaBuyDrugs {
     description: "Allow Pharmacists to buy valid Drugs from the Distributer"
     participant(p): "org.drugs.Pharmacist"
@@ -56,15 +47,6 @@ rule PharmaBuyDrugs {
     resource(d): "org.drugs.Drug"
     transaction(tx): "org.drugs.UpdateDrugStatus"
     condition: (tx.drugTransactionStatus == "DISTRIBUTED" && d.drugStatus=="VALID")
-    action: ALLOW
-}
-
-rule DistributerViewDrugs {
-    description: "Allow Distributer to view owned drugs"
-    participant(p): "org.drugs.Distributer"
-    operation: READ
-    resource(d): "org.drugs.Drug"
-    condition: (d.owner.getIdentifier() == p.getIdentifier())
     action: ALLOW
 }
 
@@ -82,9 +64,8 @@ rule ManufacturerCreateDrugs {
     description: "Allow manufacturers to create and view their Drugs"
     participant(m): "org.drugs.Manufacturer"
     operation: CREATE
-    resource(d): "org.drugs.Drug"
-    transaction(tx): "org.drugs.UpdateDrugStatus"
-    condition: (d.maker.getIdentifier() == m.getIdentifier() && tx.drugStatus == "VALID")
+    resource(cd): "org.drugs.createDrug"
+    condition: (cd.drugStatus ==  "VALID" && cd.manufacturer.getIdentifier() == m.getIdentifier())
     action: ALLOW
 }
 
