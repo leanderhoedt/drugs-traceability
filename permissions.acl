@@ -24,7 +24,7 @@ rule PatientViewDrugs {
 rule PatientBuyDrugs {
     description: "Allow Patients to buy valid Drugs from the pharmacist"
     participant(p): "org.drugs.Patient"
-    operation: CREATE, READ
+    operation: UPDATE
     resource(d): "org.drugs.Drug"
     transaction(tx): "org.drugs.UpdateDrugStatus"
     condition: (tx.drugTransactionStatus == "PHARMA" && d.drugStatus=="VALID")
@@ -98,6 +98,7 @@ rule ParticipantsSeeSelves {
     action: ALLOW
 }
 
+
 rule NetworkAdminUser {
     description: "Grant business network administrators full access to user resources"
     participant: "org.hyperledger.composer.system.NetworkAdmin"
@@ -105,6 +106,7 @@ rule NetworkAdminUser {
     resource: "**"
     action: ALLOW
 }
+
 
 rule System {
     description: "Grant all full access to system resources"
