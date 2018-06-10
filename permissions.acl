@@ -13,6 +13,15 @@
  */
 
 rule PatientViewDrugs {
+    description: "Allow Customers to view valid drugs"
+    participant(p): "org.drugs.Customer"
+    operation: READ
+    resource(d): "org.drugs.Drug"
+    condition: (d.drugStatus != "SOLD")
+    action: ALLOW
+}
+
+rule PatientViewDrugs {
     description: "Allow Patients to view owned drugs"
     participant(p): "org.drugs.Patient"
     operation: READ
