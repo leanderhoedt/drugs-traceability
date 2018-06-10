@@ -61,6 +61,8 @@ asset Drug identified by serial {
   o String name
   o DrugStatus drugStatus
   --> Manufacturer maker
+  --> Distributer distributer
+  --> Pharmacy pharmacy
   --> Customer owner optional
 }
 
