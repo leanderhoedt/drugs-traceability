@@ -36,7 +36,7 @@ enum DrugTransactionStatus{
   o DELIVERED
 }
 // MANUFACTURE DEFINITIONS
-participant Manufacturer identified by manufacturerId { 
+participant Manufacturer identified by manufacturerId {
   o String manufacturerId
   o String name
 }
@@ -61,6 +61,9 @@ asset Drug identified by serialNumber {
   o String name
   o DrugStatus drugStatus
   --> Manufacturer manufacturer
+  --> Manufacturer maker
+  --> Distributer distributer
+  --> Pharmacy pharmacy
   --> Customer owner optional
 }
 
