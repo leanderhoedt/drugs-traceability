@@ -64,7 +64,7 @@ rule ManufacturerCreateDrugs {
     description: "Allow manufacturers to create and view their Drugs"
     participant(m): "org.drugs.Manufacturer"
     operation: CREATE
-    resource(cd): "org.drugs.createDrug"
+    resource(cd): "org.drugs.CreateDrug"
     condition: (cd.drugStatus ==  "VALID" && cd.manufacturer.getIdentifier() == m.getIdentifier())
     action: ALLOW
 }

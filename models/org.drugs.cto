@@ -25,12 +25,13 @@ enum DrugStatus {
   o VOID  
 }
 
-enum DrugTransactionStatus{
+enum DrugTransactionStatus {
   o CREATED
   o DISTRIBUTED
   o PHARMA
   o DELIVERED
 }
+
 // MANUFACTURE DEFINITIONS
 participant Manufacturer identified by manufacturerId {
   o String manufacturerId
@@ -80,7 +81,7 @@ event BuyDrugsEvent {
 */
 
 //Drug creation transaction 
-transaction createDrug {
+transaction CreateDrug {
   o String serialNumber
   o String productCode
   o String batchNumber
@@ -97,10 +98,18 @@ transaction UpdateDrugStatus {
   --> Drug drug
 }
 
+transaction VerifyOrigin {
+  // TODO
+}
+
 event UpdateDrugStatusEvent {
   o DrugTransactionStatus drugTransactionStatus
   o Customer customer
   o Drug drug
+}
+
+event OriginVerified {
+  // TODO
 }
 
 // DEMO SPECIFIC DEFINITIONS
