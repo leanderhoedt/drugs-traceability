@@ -90,7 +90,6 @@ transaction VerifyDrugs {
   o String batchNumber
   o Manufacturer manufacturer
   --> Customer verifier
-  --> Drug drug
 }
 
 event UpdateDrugStatusEvent {
