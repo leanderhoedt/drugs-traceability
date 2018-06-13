@@ -13,7 +13,7 @@
  */
 
 rule ParticipantsViewDrugs {
-    description: "Allow Participants to view valid and available drugs"
+    description: "Allow Customers to view valid and available drugs"
     participant(p): "org.drugs.Customer"
     operation: READ
     resource(d): "org.drugs.Drug"

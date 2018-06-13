@@ -65,20 +65,6 @@ asset Drug identified by drugHash {
 }
 
 //transactions and events
-/*
-//Volgens mij kan je alle status updates via de updateDrugStatus doen
-transaction BuyDrugs {
-  o String orderId
-  o Drug drug
-  --> Customer buyer
-}
-
-event BuyDrugsEvent {
-  o String orderId
-  o Drug drug
-  --> Customer buyer
-}
-*/
 
 //Drug creation transaction 
 transaction CreateDrug {
@@ -99,7 +85,12 @@ transaction UpdateDrugStatus {
 }
 
 transaction VerifyOrigin {
-  // TODO
+  o String serialNumber
+  o String productCode
+  o String batchNumber
+  o Manufacturer manufacturer
+  --> Customer verifier
+  --> Drug drug
 }
 
 event UpdateDrugStatusEvent {
@@ -109,7 +100,12 @@ event UpdateDrugStatusEvent {
 }
 
 event OriginVerified {
-  // TODO
+  --> Customer verifier
+  --> Drug drug
+}
+
+event DrugInQuarantine {
+  --> Drug drug
 }
 
 // DEMO SPECIFIC DEFINITIONS
