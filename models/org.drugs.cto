@@ -84,7 +84,7 @@ transaction UpdateDrugStatus {
   --> Drug drug
 }
 
-transaction VerifyOrigin {
+transaction VerifyDrugs {
   o String serialNumber
   o String productCode
   o String batchNumber
