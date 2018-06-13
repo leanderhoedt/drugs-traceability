@@ -2,7 +2,7 @@
   "engines": {
     "composer": "^0.19.7"
   },
-  "name": "drugs-traceability",
+  "name": "drug_network",
   "version": "0.0.1",
   "description": "test",
   "scripts": {
