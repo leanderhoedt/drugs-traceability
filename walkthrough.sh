@@ -79,8 +79,8 @@ echo "Created $patientName.card"
 echo ""
 echo "Importing cards..."
 echo ""
-composer card import --file ./${manufacturerName}.card
-composer card import --file ./${distributerName}.card
-composer card import --file ./${pharmacistName}.card
-composer card import --file ./${patientName}.card
+composer card import -f ./${manufacturerName}.card
+composer card import -f ./${distributerName}.card
+composer card import -f ./${pharmacistName}.card
+composer card import -f ./${patientName}.card
 echo "Finished importing cards"
