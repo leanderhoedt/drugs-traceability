@@ -22,6 +22,4 @@ Run whole application:
 2. ./startFabric.sh
 2. ./createPeerAdmin.sh
 3. cd /pathto/drugs-traceability
-4. ./startBusinessNetwork.sh
-5. ./walkthrough 
-6. Give Y/y as first read to init script !
+5. ./walkthrough.sh

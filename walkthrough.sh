@@ -2,6 +2,12 @@
 
 URI="http://localhost:3000"
 
+read -p "Would you like to start the business network? (Y/N)" confirm
+echo
+if [[ $confirm =~ ^[Yy]$ ]]
+then sh ./startBusinessNetwork.sh
+fi
+
 read -p "Would you like to initialize everything? (Y/N)" confirm
 echo
 if [[ $confirm =~ ^[Yy]$ ]]
