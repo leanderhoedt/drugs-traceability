@@ -51,7 +51,7 @@ rule PharmaBuyDrugs {
 }
 
 rule DistributerBuyDrugs {
-    description: "Allow Distributer to buy valid Drugs from the Distributer"
+    description: "Allow Distributer to buy valid Drugs from the Manufacturer"
     participant(p): "org.drugs.Distributer"
     operation: CREATE, READ
     resource(d): "org.drugs.Drug"
@@ -65,7 +65,7 @@ rule ManufacturerCreateDrugs {
     participant(m): "org.drugs.Manufacturer"
     operation: CREATE
     resource(cd): "org.drugs.CreateDrug"
-    condition: (cd.drugStatus ==  "VALID" && cd.manufacturer.getIdentifier() == m.getIdentifier())
+    condition: (cd.manufacturer.getIdentifier() == m.getIdentifier())
     action: ALLOW
 }
 

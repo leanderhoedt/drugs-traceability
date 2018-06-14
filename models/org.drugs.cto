@@ -61,6 +61,7 @@ asset Drug identified by drugHash {
   o DrugMetaData metaData
   o String name
   o DrugStatus drugStatus
+  o DrugTransactionStatus drugTransactionStatus
   --> Distributer distributer optional
   --> Pharmacist pharmacist optional
   --> Customer owner optional
@@ -76,7 +77,6 @@ transaction CreateDrug {
 }
 
 transaction ReceiveDrug {
-  o DrugTransactionStatus drugTransactionStatus
   o Customer customer
   --> Drug drug
 }
@@ -98,8 +98,4 @@ event DrugVerified {
 
 event DrugInQuarantine {
   --> Drug drug
-}
-
-// DEMO SPECIFIC DEFINITIONS
-transaction SetupDemo {
 }

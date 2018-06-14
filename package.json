@@ -3,7 +3,7 @@
     "composer": "^0.19.7"
   },
   "name": "drug_network",
-  "version": "0.0.32",
+  "version": "0.0.37",
   "description": "drugs traceability",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/drugs-traceability.bna",
