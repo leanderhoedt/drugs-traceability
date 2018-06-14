@@ -49,16 +49,18 @@ participant Pharmacist extends Customer {
 participant Patient extends Customer {
 }
 
-//assets
-
-asset Drug identified by drugHash {
-  o String drugHash
+concept DrugMetaData {
   o String serialNumber
   o String productCode
   o String batchNumber
+  --> Manufacturer manufacturer
+} 
+//assets
+asset Drug identified by drugHash {
+  o String drugHash
+  o DrugMetaData drugMetaData
   o String name
   o DrugStatus drugStatus
-  --> Manufacturer manufacturer
   --> Distributer distributer optional
   --> Pharmacist pharmacist optional
   --> Customer owner optional
@@ -68,15 +70,12 @@ asset Drug identified by drugHash {
 
 //Drug creation transaction 
 transaction CreateDrug {
-  o String serialNumber
-  o String productCode
-  o String batchNumber
-  o String name
+  o String drugHash
+  o DrugMetaData drugMetaData
   o DrugStatus drugStatus
-  --> Manufacturer manufacturer
 }
 
-transaction UpdateDrugStatus {
+transaction ReceiveDrug {
   o DrugTransactionStatus drugTransactionStatus
   o Customer customer
   --> Distributer distributer optional
@@ -84,23 +83,20 @@ transaction UpdateDrugStatus {
   --> Drug drug
 }
 
-transaction VerifyDrugs {
-  o String serialNumber
-  o String productCode
-  o String batchNumber
-  o Manufacturer manufacturer
+transaction VerifyDrug {
+  o DrugMetaData drugMetaData
   --> Customer verifier
 }
 
-event UpdateDrugStatusEvent {
+event ReceiveDrugEvent {
   o DrugTransactionStatus drugTransactionStatus
   o Customer customer
   o Drug drug
 }
 
-event OriginVerified {
-  --> Customer verifier
-  --> Drug drug
+event DrugVerified {
+  o Customer verifier
+  o Drug drug
 }
 
 event DrugInQuarantine {

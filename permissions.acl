@@ -35,7 +35,7 @@ rule PatientBuyDrugs {
     participant(p): "org.drugs.Patient"
     operation: UPDATE
     resource(d): "org.drugs.Drug"
-    transaction(tx): "org.drugs.UpdateDrugStatus"
+    transaction(tx): "org.drugs.ReceiveDrug"
     condition: (tx.drugTransactionStatus == "PHARMA" && d.drugStatus=="VALID")
     action: ALLOW
 }
@@ -45,7 +45,7 @@ rule PharmaBuyDrugs {
     participant(p): "org.drugs.Pharmacist"
     operation: CREATE, READ
     resource(d): "org.drugs.Drug"
-    transaction(tx): "org.drugs.UpdateDrugStatus"
+    transaction(tx): "org.drugs.ReceiveDrug"
     condition: (tx.drugTransactionStatus == "DISTRIBUTED" && d.drugStatus=="VALID")
     action: ALLOW
 }
@@ -55,7 +55,7 @@ rule DistributerBuyDrugs {
     participant(p): "org.drugs.Distributer"
     operation: CREATE, READ
     resource(d): "org.drugs.Drug"
-    transaction(tx): "org.drugs.UpdateDrugStatus"
+    transaction(tx): "org.drugs.ReceiveDrug"
     condition: (tx.drugTransactionStatus == "CREATED" && d.drugStatus=="VALID")
     action: ALLOW
 }

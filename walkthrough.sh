@@ -37,3 +37,4 @@ dafalganBatchNumber=`readJson Dafalgan.json batchNumber`
 read -p "enter to continue ..."
 
 
+
