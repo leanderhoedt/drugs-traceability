@@ -1,5 +1,7 @@
 #!/bin/bash
 
+URI="http://localhost:3000"
+
 read -p "Would you like to initialize everything? (Y/N)" confirm
 echo
 if [[ $confirm =~ ^[Yy]$ ]]
@@ -27,14 +29,28 @@ function readJson {
 
 
 # generate sha256 of Dafalgan metadata
-drugHash=`sha256sum Dafalgan.json | awk '{ print $1 }'`
+dafalganDrugHash=`sha256sum Dafalgan.json | awk '{ print $1 }'`
 
 # get metadata of file
 dafalganSerialNumber=`readJson Dafalgan.json serialNumber`
 dafalganProductCode=`readJson Dafalgan.json productCode`
 dafalganBatchNumber=`readJson Dafalgan.json batchNumber`
 
-read -p "enter to continue ..."
+manufacturerId="jo"
+manufacturerName="manufacturer_$manufacturerId"
+distributerId="gene"
+distributerName="distributer_$distributerId"
+pharmacistId="leander"
+pharmacistName="pharmacist_$pharmacistId"
+patientId="cedric"
+patientName="patient_$patientId"
 
+echo "Creating drug ..."
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{ "$class": "org.drugs.CreateDrug", "drugHash": "'$dafalganDrugHash'", "name": "Dafalgan", "metaData": { "$class": "org.drugs.DrugMetaData", "serialNumber": "'$dafalganSerialNumber'", "productCode": "'$dafalganProductCode'", "batchNumber": "'$dafalganBatchNumber'", "manufacturer": "resource:org.drugs.Manufacturer#'$manufacturerId'" } }' "$URI/api/CreateDrug"
 
+echo ""
+echo "Created drug '$dafalganDrugHash'"
+echo "by Manufacturer '$manufacturerId'"
 
+echo ""
+echo "Distributer '$distributerId' receives drugs from manufacturer '$manufacturerId'"

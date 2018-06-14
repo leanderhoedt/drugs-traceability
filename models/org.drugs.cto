@@ -78,8 +78,6 @@ transaction CreateDrug {
 transaction ReceiveDrug {
   o DrugTransactionStatus drugTransactionStatus
   o Customer customer
-  --> Distributer distributer optional
-  --> Pharmacist pharmacist optional
   --> Drug drug
 }
 
@@ -89,7 +87,6 @@ transaction VerifyDrug {
 }
 
 event ReceiveDrugEvent {
-  o DrugTransactionStatus drugTransactionStatus
   o Customer customer
   o Drug drug
 }

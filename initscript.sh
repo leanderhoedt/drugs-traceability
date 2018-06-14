@@ -4,6 +4,12 @@
 URI="http://localhost:3000"
 
 echo "Starting Drugs traceability workflow ..."
+
+echo "composer rest server will be started with admin credentials"
+echo "make sure you started the business network with startBusinessNetwork.sh"
+composer-rest-server -c admin@drug_network
+sleep 3
+
 echo "2 participants will be created for each type"
 
 # Create manufacturers
@@ -61,5 +67,14 @@ composer card import -f ./${distributerName}.card
 composer card import -f ./${pharmacistName}.card
 composer card import -f ./${patientName}.card
 echo "Finished importing cards"
-echo "Finished INIT SCRIPT"
 echo ""
+
+echo "Creating identities ..."
+
+composer identity issue -u manufacturer1 -a "resource:org.drugs.Manufacturer#$manufacturerId" -f $manufacturerName.card -c admin@drug_network
+composer identity issue -u distributer1 -a "resource:org.drugs.Distributer#$distributerId" -f $distributerName.card -c admin@drug_network
+composer identity issue -u pharmacist1 -a "resource:org.drugs.Pharmacist#$pharmacistId" -f $pharmacistName.card -c admin@drug_network
+composer identity issue -u patient1 -a "resource:org.drugs.Patient#$patientId" -f $patientName.card -c admin@drug_network
+
+echo "Created identities"
+echo "Finished INIT SCRIPT"
