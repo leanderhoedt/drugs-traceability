@@ -51,7 +51,7 @@ pharmacistName="pharmacist_$pharmacistId"
 patientId="cedric"
 patientName="patient_$patientId"
 
-echo "Login as Manufacturer ... (or just continue as admin)"
+echo "Login as Manufacturer ... "
 echo "create new bash and run: composer-rest-server -a 'never' -c manufacturer_jo@drug_network"
 read -p
 echo "Creating drug ..."
