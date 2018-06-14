@@ -58,7 +58,7 @@ concept DrugMetaData {
 //assets
 asset Drug identified by drugHash {
   o String drugHash
-  o DrugMetaData drugMetaData
+  o DrugMetaData metaData
   o String name
   o DrugStatus drugStatus
   --> Distributer distributer optional
@@ -71,8 +71,8 @@ asset Drug identified by drugHash {
 //Drug creation transaction 
 transaction CreateDrug {
   o String drugHash
-  o DrugMetaData drugMetaData
-  o DrugStatus drugStatus
+  o String name
+  o DrugMetaData metaData
 }
 
 transaction ReceiveDrug {
@@ -84,7 +84,7 @@ transaction ReceiveDrug {
 }
 
 transaction VerifyDrug {
-  o DrugMetaData drugMetaData
+  o DrugMetaData metaData
   --> Customer verifier
 }
 
