@@ -16,7 +16,7 @@ This business network defines:
 
 ## Description
 
-In this implementation of the drug traceability solution, we chose to add two statuses to a drug. One to indicate if a drug is valid/void/sold and one to track the drug trough its lifetime. 
+In this implementation of the drug traceability solution, we chose to add two statuses to a drug. One to indicate if a drug is valid/void/sold and the second to track the drug trough its lifetime. 
 This allows us to set permissions easier and with more precission and keep void/sold drugs from being resold/distributed.
 The second status we used to track the product. Again this is done to make the permission model easier. We can now block drugs from transfering twice or from a Manufacturer to the Patient.
 
