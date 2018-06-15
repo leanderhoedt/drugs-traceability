@@ -12,6 +12,7 @@
  * limitations under the License.
  */
 
+//Viewing permissions
 rule ParticipantsViewDrugs {
     description: "Allow Customers to view valid and available drugs"
     participant(p): "org.drugs.Customer"
@@ -29,6 +30,28 @@ rule PatientViewOwnDrugs {
     condition: (d.owner.getIdentifier() == p.getIdentifier())
     action: ALLOW
 }
+
+//Validation
+rule CustomersVerifyDrugs {
+  description: "Allow customers to validate drugs"
+  participant(p): "org.drugs.Customer"
+  operation: READ
+  resource(v): "org.drugs.VerifyDrug"
+  condition: (v.verifier.getIdentifier()==p.getIdentifier())
+  action: ALLOW
+}
+
+//Distributer permissions
+rule DistributerBuyDrugs {
+    description: "Allow Distributer to buy valid Drugs from the Manufacturer"
+    participant(p): "org.drugs.Distributer"
+    operation: CREATE, READ
+    resource(d): "org.drugs.Drug"
+    transaction(tx): "org.drugs.ReceiveDrug"
+    condition: (d.drugTransactionStatus == "CREATED" && d.drugStatus=="VALID")
+    action: ALLOW
+}
+
 
 rule PatientBuyDrugs {
     description: "Allow Patients to buy valid Drugs from the pharmacist"
@@ -50,15 +73,7 @@ rule PharmaBuyDrugs {
     action: ALLOW
 }
 
-rule DistributerBuyDrugs {
-    description: "Allow Distributer to buy valid Drugs from the Manufacturer"
-    participant(p): "org.drugs.Distributer"
-    operation: CREATE, READ
-    resource(d): "org.drugs.Drug"
-    transaction(tx): "org.drugs.ReceiveDrug"
-    condition: (d.drugTransactionStatus == "CREATED" && d.drugStatus=="VALID")
-    action: ALLOW
-}
+
 
 //Manufacturer permissions
 rule ManufacturerCreateDrugs {

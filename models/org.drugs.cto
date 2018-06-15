@@ -83,6 +83,7 @@ transaction ReceiveDrug {
 
 transaction VerifyDrug {
   o DrugMetaData metaData
+  o String drugHash
   --> Customer verifier
 }
 
