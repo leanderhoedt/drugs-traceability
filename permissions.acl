@@ -60,21 +60,22 @@ rule DistributerBuyDrugs {
     action: ALLOW
 }
 
+//Manufacturer permissions
 rule ManufacturerCreateDrugs {
     description: "Allow manufacturers to create and view their Drugs"
     participant(m): "org.drugs.Manufacturer"
     operation: CREATE
     resource(cd): "org.drugs.CreateDrug"
-    condition: (cd.manufacturer.getIdentifier() == m.getIdentifier())
+    condition: (cd.metaData.manufacturer.getIdentifier() == m.getIdentifier())
     action: ALLOW
 }
 
 rule ManufacturerReadDrugs {
     description: "Allow manufacturers to create and view their drugs"
     participant(m): "org.drugs.Manufacturer"
-    operation: READ
+    operation: READ, CREATE
     resource(d): "org.drugs.Drug"
-    condition: (d.maker.getIdentifier() == m.getIdentifier())
+    condition: (d.metaData.manufacturer.getIdentifier() == m.getIdentifier())
     action: ALLOW
 }
 
