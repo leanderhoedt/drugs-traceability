@@ -30,6 +30,16 @@ rule CustomersViewDrugs {
     condition: (d.drugStatus != "SOLD")
     action: ALLOW
 }
+
+rule CustomerReceiveDrugs {
+  description: "Allow Customers to execute the receive transaction"
+  participant(p): "org.drugs.Customer"
+  operation: CREATE
+  resource(r): "org.drugs.ReceiveDrug"
+  condition: (r.customer.getIdentifier() == p.getIdentifier())
+  action: ALLOW
+}
+
 //we only allow Pharmacists to view the drugs they have sold. 
 //Distributers don't need to know what patient has consumed a drug (patient safety)
 //A pharmacists needs to have a log of drugs a patient has taken to make sure the patient doesn't take drugs that are not compatible
@@ -42,25 +52,15 @@ rule PharmacistViewSoldDrugs {
   action: ALLOW
 }
 
+
 //verification
 //add condition to make sure nobody impersonates someone
 rule CustomersVerifyDrugs {
   description: "Allow customers to validate drugs"
   participant(p): "org.drugs.Customer"
-  operation: READ
+  operation: READ, CREATE
   resource(v): "org.drugs.VerifyDrug"
   condition: (v.verifier.getIdentifier()==p.getIdentifier())
-  action: ALLOW
-}
-
-
-//Allow customers to buy drugs
-rule CustomerReceiveDrugs {
-  description: "Allow Customers to execute the receive transaction"
-  participant(p): "org.drugs.Customer"
-  operation: CREATE
-  resource(r): "org.drugs.ReceiveDrug"
-  condition: (r.customer.getIdentifier() == pharmacist)
   action: ALLOW
 }
 
@@ -75,6 +75,7 @@ rule PatientBuyDrugs {
     action: ALLOW
 }
 
+//Pharmacy permissions
 rule PharmacistBuyDrugs {
     description: "Allow Pharmacist to buy valid Drugs from the Distributer"
     participant(p): "org.drugs.Pharmacist"
@@ -84,6 +85,16 @@ rule PharmacistBuyDrugs {
     condition: (d.drugStatus=="VALID" && d.drugTransactionStatus == "DISTRIBUTED")
     action: ALLOW
 }
+
+//Distributer permissions
+/*rule DistributerReceiveDrugs {
+  description: "Allow Distributers to execute the receive transaction"
+  participant(p): "org.drugs.Distributer"
+  operation: CREATE
+  resource(r): "org.drugs.ReceiveDrug"
+  condition: (r.customer.getIdentifier() == p.getIdentifier())
+  action: ALLOW
+}*/
 
 rule DistributerBuyDrugs {
     description: "Allow Distributer to buy valid Drugs from the Manufacturer"
@@ -106,11 +117,54 @@ rule ManufacturerCreateDrugs {
 }
 
 rule ManufacturerReadDrugs {
-    description: "Allow manufacturers to create and view their drugs"
+    description: "Allow manufacturers to create drugs"
     participant(m): "org.drugs.Manufacturer"
-    operation: READ, CREATE
+    operation: CREATE
     resource(d): "org.drugs.Drug"
     condition: (d.metaData.manufacturer.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule ManufacturerViewDrugs {
+    description: "Allow manufacturers to view all unsold drugs"
+    participant(m): "org.drugs.Manufacturer"
+    operation: READ
+    resource(d): "org.drugs.Drug"
+    condition: (d.drugStatus != "SOLD")
+    action: ALLOW
+}
+
+
+rule ManufacturerDenyViewPatient {
+    description: "Deny manufacturers to see Patients"
+    participant: "org.drugs.Manufacturer"
+    operation: READ
+    resource: "org.drugs.Patient"
+    action: DENY
+}
+
+rule DistributerDenyViewPatient {
+    description: "Deny Distributer to see Patients"
+    participant: "org.drugs.Distributer"
+    operation: READ
+    resource: "org.drugs.Patient"
+    action: DENY
+}
+
+rule PatientDenyViewPatient {
+    description: "Deny Patient to see other Patients"
+    participant(p): "org.drugs.Patient"
+    operation: READ
+    resource(r): "org.drugs.Patient"
+    condition: (p.getIdentifier() != r.getIdentifier())
+    action: DENY
+}
+
+rule ParticipantsSeeOthers {
+    description: "Let participants see other participants"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: READ
+    resource: "org.hyperledger.composer.system.Participant"
     action: ALLOW
 }
 
