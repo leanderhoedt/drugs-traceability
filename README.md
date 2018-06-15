@@ -36,7 +36,7 @@ All 'Customers' can verify a drug before buying this. We need to implement this 
 
 **Hash**
 
-We tried to generate the hash in the logic.js code. At first we tried to import a library and use this to generate the hash. This is not possible though. We than decided that hashing should not happen on the chain logic. Hashing logic is now transfered to the client side of the application. Since this project does not include a front end we added the hashing code to the walktrhough script.
+We tried to generate the hash in the logic.js code. At first we tried to import a library and use this to generate the hash. This is not possible though. We than decided that hashing should not happen on the chain logic. Hashing logic is now transfered to the client side of the application. Since this project does not include a front end we added the hashing code to the walkthrough script.
 
 **Permissions**
 
