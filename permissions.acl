@@ -64,6 +64,16 @@ rule CustomersVerifyDrugs {
   action: ALLOW
 }
 
+rule CustomersVerifyDrugs2 {
+    description: "Allow customers to verify drugs"
+    participant(p): "org.drugs.Customer"
+    operation: UPDATE
+    resource(d): "org.drugs.Drug"
+    transaction(tx): "org.drugs.VerifyDrug"
+    condition: (tx.verifier.getIdentifier() == p.getIdentifier())
+    action: ALLOW
+}
+
 //Buying rules
 rule PatientBuyDrugs {
     description: "Allow Patients to buy valid Drugs from the pharmacist"
