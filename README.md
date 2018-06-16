@@ -48,6 +48,10 @@ We had a some issues with installing & upgrading the network. You had to complet
 We created a ./startBusinessNetwork.sh (after setting version to 0.0.1). This script creates the bna file, installs & starts the network. You had to import the card of the networkadmin and ping to check if the card is correctly imported. 
 We also created an ./upgradeBusinessNetwork.sh. You had to bump your package.json version. The script then reads the version from package.json, and upgrades the network.
 
+**radix tree**
+
+We thing it's not possible to analyze the redix tree in a transaction processor of hyperledger composer.
+
 ## Possible improvements
 
 * Allow Pharmacists to view all drugs from a patient WITH permition of that patient.

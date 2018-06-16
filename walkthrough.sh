@@ -105,6 +105,7 @@ function evil_patient(){
   echo "Selling drug to Nico ..."
   curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"$class": "org.drugs.ReceiveDrug", "customer": "resource:org.drugs.Patient#'$patientIdNico'", "drug": "resource:org.drugs.Drug#'$paraDrugHash'" }' 'http://localhost:3000/api/ReceiveDrug' | python -m json.tool
   echo ""
+  echo "An error should be above, saying Patient Cedric has no permission to receive drug"
   read -p "Press any key to finish..."
   kill $!
   main
@@ -138,6 +139,7 @@ function evil_distributer(){
   #create drug
   curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{ "$class": "org.drugs.CreateDrug", "drugHash": "'$aranespDrugHash'", "name": "Aranesp", "metaData": { "$class": "org.drugs.DrugMetaData", "serialNumber": "'$aranespSerialNumber'", "productCode": "'$aranespProductCode'", "batchNumber": "'$aranespBatchNumber'", "manufacturer": "resource:org.drugs.Manufacturer#'$manufacturerId'" } }' "$URI/api/CreateDrug" | python -m json.tool
   echo ""
+  echo "An error should be displayed above, Distributer gene can't create drug"
   read -p "Press any key to finish..."
   kill $!
   main
