@@ -8,11 +8,11 @@ if [[ $confirm =~ ^[Yy]$ ]]
 then sh ./startBusinessNetwork.sh
 fi
 
-read -p "Would you like to initialize everything? (Y/N)" confirm
-echo
+read -p "Would you like to initialize everything? (make sure the rest server is not running) (Y/N)" confirm
 if [[ $confirm =~ ^[Yy]$ ]]
 then sh ./initscript.sh
 fi
+echo "Environment has been setup."
 
 
 function readJson {  
@@ -33,7 +33,6 @@ function readJson {
   fi; 
 }
 
-
 # generate sha256 of Dafalgan metadata
 dafalganDrugHash=`sha256sum Dafalgan.json | awk '{ print $1 }'`
 
@@ -52,46 +51,44 @@ patientId="cedric"
 patientName="patient_$patientId"
 
 echo "Login as Manufacturer ... "
-echo "create new bash and run: composer-rest-server -a 'never' -c manufacturer_jo@drug_network"
-read -p
+composer-rest-server -n 'never' -c manufacturer_jo@drug_network &
+sleep 5
+read -p "Press any key to continue..."
 echo "Creating drug ..."
-# create drug
+#create drug
 curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{ "$class": "org.drugs.CreateDrug", "drugHash": "'$dafalganDrugHash'", "name": "Dafalgan", "metaData": { "$class": "org.drugs.DrugMetaData", "serialNumber": "'$dafalganSerialNumber'", "productCode": "'$dafalganProductCode'", "batchNumber": "'$dafalganBatchNumber'", "manufacturer": "resource:org.drugs.Manufacturer#'$manufacturerId'" } }' "$URI/api/CreateDrug"
-
 echo ""
 echo "Created drug '$dafalganDrugHash'"
 echo "by Manufacturer '$manufacturerId'"
+kill $!
 
 echo "Login as Distributer ..."
-echo "create new bash and run: composer-rest-server (distributer_gene@drug_network)"
-read -p
+composer-rest-server -n 'never' -c distributer_gene@drug_network &
+sleep 5
+read -p "Press any key to continue..."
 echo ""
-echo "Distributer '$distributerId' receives drugs from manufacturer '$manufacturerId'"
-
-# receive drug from manufacturer to distributer
-curl
-
-
-echo "Received drug from Manufacturer '$manufacturerId'"
-echo "to Distributer '$distributerId'"
-
 echo "Distributer verifies orgin ..."
-# verify origin drug by distributer
-curl 
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{ "$class": "org.drugs.VerifyDrug",  "metaData": { "$class": "org.drugs.DrugMetaData", "serialNumber": "'$dafalganSerialNumber'", "productCode": "'$dafalganProductCode'", "batchNumber": "'$dafalganBatchNumber'",  "manufacturer": "resource:org.drugs.Manufacturer#'$manufacturerId'" }, "drugHash": "'$dafalganDrugHash'", "verifier": "resource:org.drugs.Distributer#'$distributerId'" }' 'http://localhost:3000/api/VerifyDrug'
+echo "Distributer '$distributerId' receives drugs from manufacturer '$manufacturerId'"
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"$class": "org.drugs.ReceiveDrug", "customer": "resource:org.drugs.Distributer#'$distributerId'", "drug": "resource:org.drugs.Drug#'$dafalganDrugHash'" }' 'http://localhost:3000/api/ReceiveDrug'
+echo ""
+kill $!
 
 echo "Login as Pharmacist ..."
-echo "create new bash and run: composer-rest-server (pharmacist_leander@drug_network)"
-read -p
-
-# receive drug from distributer to pharmacist
-
-echo "Distributer verifies orgin ..."
-# verify origin drug by distributer
-curl 
-
+composer-rest-server -n 'never' -c pharmacist_leander@drug_network &
+read -p "Press any key to continue..."
 echo ""
-echo "Received drug from Distributer '$distributerId'"
-echo "to Distributer '$pharmacistId'"
+echo "Pharmacist verifies orgin ..."
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{ "$class": "org.drugs.VerifyDrug",  "metaData": { "$class": "org.drugs.DrugMetaData", "serialNumber": "'$dafalganSerialNumber'", "productCode": "'$dafalganProductCode'", "batchNumber": "'$dafalganBatchNumber'",  "manufacturer": "resource:org.drugs.Manufacturer#'$manufacturerId'" }, "drugHash": "'$dafalganDrugHash'", "verifier": "resource:org.drugs.Pharmacist#'$pharmacistId'" }' 'http://localhost:3000/api/VerifyDrug'
+echo "Pharmacist '$pharmacistId' receives drugs from distributer '$distributerId'"
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"$class": "org.drugs.ReceiveDrug", "customer": "resource:org.drugs.Pharmacist#'$pharmacistId'", "drug": "resource:org.drugs.Drug#'$dafalganDrugHash'" }' 'http://localhost:3000/api/ReceiveDrug'
+kill $!
 
 echo "Login as Patient ..."
-echo "create new bash and run: composer-rest-server (patient_cedric@drug_network)"
+composer-rest-server -n 'never' -c patient_cedric@drug_network &
+sleep 5
+read -p "Press any key to continue..."
+echo ""
+echo "Patient '$patientId' receives drugs from pharmacist '$pharmacistId'"
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"$class": "org.drugs.ReceiveDrug", "customer": "resource:org.drugs.Patient#'$patientId'", "drug": "resource:org.drugs.Drug#'$dafalganDrugHash'" }' 'http://localhost:3000/api/ReceiveDrug'
+kill $!
