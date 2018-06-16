@@ -42,6 +42,12 @@ We tried to generate the hash in the logic.js code. At first we tried to import 
 
 We had some issues getting started with the permission model. The hyperledger documentation is good to get started but didn't give enough in depth examples. To get arround this we started out with allowing everyone to do everything. This allowed us to continue on the logic and cto. Once we got more familiar with the permission model we started by restricting access slowly. Once we developed all the rules that where necesary we refactored these rules into a smaller more efficient set. 
 
+**Upgrading business network**
+
+We had a some issues with installing & upgrading the network. You had to completely run ./stopFabric.sh, ./teardownFabric.sh, teardownAllDocker.sh. After this, set your package.json to 0.0.1 & remove content of folder ~/.composer (this will remove all cards!). Start your fabric again with sh ~/fabric-dev-server/startFabric.sh & ~/fabric-dev-server/createPeerAdminCard.sh.
+We created a ./startBusinessNetwork.sh (after setting version to 0.0.1). This script creates the bna file, installs & starts the network. You had to import the card of the networkadmin and ping to check if the card is correctly imported. 
+We also created an ./upgradeBusinessNetwork.sh. You had to bump your package.json version. The script then reads the version from package.json, and upgrades the network.
+
 ## Possible improvements
 
 * Allow Pharmacists to view all drugs from a patient WITH permition of that patient.
