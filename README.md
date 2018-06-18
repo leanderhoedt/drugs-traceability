@@ -62,6 +62,8 @@ Run whole application:
 
 1. cd ~/fabric-dev-servers
 2. ./startFabric.sh
-2. ./createPeerAdmin.sh
+3. ./createPeerAdmin.sh
 3. cd /pathto/drugs-traceability
-5. ./walkthrough.sh
+4. If needed: ./startBusinessNetwork.sh
+5. If needed: ./initscript.sh
+6. ./walkthrough.sh
