@@ -50,7 +50,7 @@ We also created an ./upgradeBusinessNetwork.sh. You had to bump your package.jso
 
 **radix tree**
 
-We thing it's not possible to analyze the redix tree in a transaction processor of hyperledger composer.
+We think it's not possible to analyze the redix tree in a transaction processor of hyperledger composer.
 
 ## Possible improvements
 
